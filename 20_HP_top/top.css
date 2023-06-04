@@ -44,10 +44,8 @@ header {
 .main-02 {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     margin-top: 40px;
-}
-.main-02-01{
-    margin-top: 100px;
 }
 .main-02-img {
     padding-right: 50px;
