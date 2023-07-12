@@ -10,25 +10,27 @@
 </head>
 <body>
 <?php
-    $user_name = isset($_POST['user_name']) ? $_POST['user_name'] : '';
-    $user_kana = isset($_POST['user_kana']) ? $_POST['user_kana'] : '';
-    $user_email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
-    $user_tel = isset($_POST['user_tel']) ? $_POST['user_tel'] : '';
-    $inquiry_item = isset($_POST['inquiry_item']) ? $_POST['inquiry_item'] : '';
-    $inquiry_content = isset($_POST['inquiry_content']) ? $_POST['inquiry_content'] : '';
-    $privacy_policy_agreement = isset($_POST['privacy_policy_agreement']) ? '同意しました' : '同意していません';
+		// フォームから送信されたデータを取得して、それぞれの変数に代入
+    $user_name = $_POST['user_name'];
+    $user_kana = $_POST['user_kana'];
+    $user_email = $_POST['user_email'];
+    $user_tel = $_POST['user_tel'];
+    $inquiry_item = $_POST['inquiry_item'] ?? '';
+    $inquiry_content = $_POST['inquiry_content'] ?? '';
+    $privacy_policy_agreement = $_POST['privacy_policy_agreement'] ?? '';
 
-    // 必須項目の入力チェック
-    $required_fields = ['user_name', 'user_kana', 'user_email', 'user_tel', 'inquiry_item', 'inquiry_content'];
-    $has_error = false;
-    $error_messages = [];
-
-    foreach ($required_fields as $field) {
-        if (empty($_POST[$field])) {
-            $has_error = true;
-        }
-    }
-
+    // $has_errorという変数を用意し、エラーの有無を管理します（初期値はfalse）
+		$required_fields = ['user_name', 'user_kana', 'user_email', 'user_tel', 'inquiry_item', 'inquiry_content'];
+		$has_error = false;
+		// $error_messagesという空の配列を用意し、エラーメッセージを管理します。
+		$error_messages = [];
+		
+		// 必須項目の配列をループ処理し、各フィールドの値がnullまたはトリム(文字列の先頭と末尾に存在する空白文字（スペース、タブ、改行など）を削除)した結果が空文字列である場合、$has_errorをtrueに設定します。
+		foreach ($required_fields as $field) {
+				if ($_POST[$field] === null || trim($_POST[$field]) === '') {
+						$has_error = true;
+				}
+		}
     // メールアドレスと電話番号のバリデーション
     if ($user_email !== '' && !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         $has_error = true;
@@ -76,6 +78,8 @@
 <section class="con_02">
     <div class="wrapper">
         <div class="contact">
+				<form action="task8-1.php" method="POST">
+					<!--//フォームに入力エラーがある場合にエラーメッセージをリスト形式で表示するためのHTML要素を生成します。エラーメッセージは赤色で表示され、ユーザーにエラー内容を明示します。 -->
             <?php if ($has_error): ?>
                 <div class="error-messages">
                     <ul>
@@ -87,45 +91,46 @@
             <?php endif; ?>
 			<table>
 				<tr>
+					<!-- $has_errorがtrueの場合、入力フィールドの上に赤色でエラーメッセージが表示されます。入力がない場合、エラーメッセージが表示されます。 -->
 					<th>お名前<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($user_name)): ?>
+						<?php if ($has_error): ?>
             <p style="color: red;">お名前を入力してください</p>
 						<?php endif; ?>
-						<input class="contact-6" type="text" placeholder="山田太郎" value="<?php echo $user_name; ?>">
+						<input class="contact-6" type="text" placeholder="山田太郎" name="user_name" value="<?php echo $user_name; ?>">
 					</td>
 				</tr>
 				<tr>
 					<th>フリガナ<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($user_kana)): ?>
+						<?php if ($has_error): ?>
             <p style="color: red;">フリガナを入力してください</p>
 						<?php endif; ?>
-						<input class="contact-6" type="text" placeholder="ヤマダタロウ" name="user_kana">
+						<input class="contact-6" type="text" placeholder="ヤマダタロウ" name="user_kana" value="<?php echo $user_kana; ?>">
 					</td>
 				</tr>
 				<tr>
 					<th>メールアドレス<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($user_email)): ?>
+						<?php if ($has_error): ?>
             <p style="color: red;">メールアドレスを入力してください</p>
 						<?php endif; ?>
-						<input class="contact-6" type="email" placeholder="info@fast-creademy.jp" value="<?php echo $user_email; ?>">
+						<input class="contact-6" type="email" placeholder="info@fast-creademy.jp" name="user_email" value="<?php echo $user_email; ?>">
 					</td>
 				</tr>
 				<tr>
 					<th>電話番号<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($user_tel)): ?>
+						<?php if ($has_error): ?>
             <p style="color: red;">電話番号を入力してください</p>
 						<?php endif; ?>
-						<input class="contact-6" type="tel" placeholder="0123456789" value="<?php echo $user_tel; ?>">
+						<input class="contact-6" type="tel" placeholder="0123456789" name="user_tel" value="<?php echo $user_tel; ?>">
 					</td>
 				</tr>
 				<tr>
 					<th>お問い合わせ項目<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($inquiry_item)): ?>
+						<?php if (empty($inquiry_item)): ?> <!-- 「お問い合わせ項目」が選択されていない場合に条件が成立 -->
         		<p style="color: red;">お問い合わせ項目を選択してください</p>
     				<?php endif; ?>
 						<select class="contact-3" name="inquiry_item">
@@ -139,20 +144,21 @@
 				<tr>
 					<th>お問い合わせ内容<span>必須</span></th>
 					<td>
-						<?php if ($has_error && empty($inquiry_content)): ?>
+						<?php if ($has_error): ?> <!-- お問い合わせ内容が未入力の場合にエラーメッセージが表示 -->
         		<p style="color: red;">お問い合わせ内容をご記入ください</p>
     				<?php endif; ?>
-    				<textarea class="contact-7 <?php if ($has_error && empty($inquiry_content)) echo 'error'; ?>" placeholder="こちらにお問い合わせ内容をご記入ください" cols="50" rows="10" name="inquiry_content"><?php echo $inquiry_content; ?></textarea>
+    				<textarea class="contact-7" placeholder="こちらにお問い合わせ内容をご記入ください" cols="50" rows="10" name="inquiry_content"><?php echo $inquiry_content; ?></textarea>
 					</td>
 				</tr>
 				<tr>
-					<th>個人情報保護方針<span>必須</span></th>
-					<td>
-						<?php if ($has_error && !isset($_POST['privacy_policy_agreement'])): ?>
-						<p style="color: red;">個人情報保護方針に同意してください。</p>
+				<th>個人情報保護方針<span>必須</span></th>
+				<td>
+					<?php if ($has_error && empty($_POST['privacy_policy_agreement'])): ?><p style="color: red;">個人情報保護方針に同意してください。</p>
 						<?php endif; ?>
-						<input type="checkbox" name="privacy_policy_agreement" <?php if ($privacy_policy_agreement === '同意しました') echo 'checked'; ?>>
-						<a class="agree" href="null">個人情報保護方針<i class="fas fa-window-restore"></i></a> に同意します。
+						<label>
+							<input type="checkbox" name="privacy_policy_agreement" <?= !empty($_POST['privacy_policy_agreement']) ? 'checked' : '' ?>>
+							<a class="agree" href="null">個人情報保護方針<i class="fas fa-window-restore"></i></a>に同意します。
+    				</label>
 					</td>
 				</tr>
 			</table>
@@ -163,7 +169,7 @@
 			</div>
 		<?php else: ?>
 			<div class="more_btn_01 btn_center">
-				<a href="contact.html"><button>確認</button></a>
+				<button type="submit">確認</button>
 			</div>
 		<?php endif; ?>
 	</div>
