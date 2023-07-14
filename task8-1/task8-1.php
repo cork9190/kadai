@@ -11,10 +11,10 @@
 <body>
 <?php
 		// フォームから送信されたデータを取得して、それぞれの変数に代入
-    $user_name = $_POST['user_name'];
-    $user_kana = $_POST['user_kana'];
-    $user_email = $_POST['user_email'];
-    $user_tel = $_POST['user_tel'];
+    $user_name = $_POST['user_name'] ?? '';
+    $user_kana = $_POST['user_kana'] ?? '';
+    $user_email = $_POST['user_email'] ?? '';
+    $user_tel = $_POST['user_tel'] ?? '';
     $inquiry_item = $_POST['inquiry_item'] ?? '';
     $inquiry_content = $_POST['inquiry_content'] ?? '';
     $privacy_policy_agreement = $_POST['privacy_policy_agreement'] ?? '';
@@ -94,7 +94,7 @@
 					<!-- $has_errorがtrueの場合、入力フィールドの上に赤色でエラーメッセージが表示されます。入力がない場合、エラーメッセージが表示されます。 -->
 					<th>お名前<span>必須</span></th>
 					<td>
-						<?php if ($has_error): ?>
+						<?php if ($user_name === ''): ?>
             <p style="color: red;">お名前を入力してください</p>
 						<?php endif; ?>
 						<input class="contact-6" type="text" placeholder="山田太郎" name="user_name" value="<?php echo $user_name; ?>">
@@ -103,7 +103,7 @@
 				<tr>
 					<th>フリガナ<span>必須</span></th>
 					<td>
-						<?php if ($has_error): ?>
+						<?php if ($user_kana === ''): ?>
             <p style="color: red;">フリガナを入力してください</p>
 						<?php endif; ?>
 						<input class="contact-6" type="text" placeholder="ヤマダタロウ" name="user_kana" value="<?php echo $user_kana; ?>">
@@ -112,7 +112,7 @@
 				<tr>
 					<th>メールアドレス<span>必須</span></th>
 					<td>
-						<?php if ($has_error): ?>
+						<?php if ($user_email === ''): ?>
             <p style="color: red;">メールアドレスを入力してください</p>
 						<?php endif; ?>
 						<input class="contact-6" type="email" placeholder="info@fast-creademy.jp" name="user_email" value="<?php echo $user_email; ?>">
@@ -121,7 +121,7 @@
 				<tr>
 					<th>電話番号<span>必須</span></th>
 					<td>
-						<?php if ($has_error): ?>
+						<?php if ($user_tel === ''): ?>
             <p style="color: red;">電話番号を入力してください</p>
 						<?php endif; ?>
 						<input class="contact-6" type="tel" placeholder="0123456789" name="user_tel" value="<?php echo $user_tel; ?>">
@@ -144,7 +144,7 @@
 				<tr>
 					<th>お問い合わせ内容<span>必須</span></th>
 					<td>
-						<?php if ($has_error): ?> <!-- お問い合わせ内容が未入力の場合にエラーメッセージが表示 -->
+						<?php if ($inquiry_content === ''): ?> <!-- お問い合わせ内容が未入力の場合にエラーメッセージが表示 -->
         		<p style="color: red;">お問い合わせ内容をご記入ください</p>
     				<?php endif; ?>
     				<textarea class="contact-7" placeholder="こちらにお問い合わせ内容をご記入ください" cols="50" rows="10" name="inquiry_content"><?php echo $inquiry_content; ?></textarea>
@@ -153,7 +153,7 @@
 				<tr>
 				<th>個人情報保護方針<span>必須</span></th>
 				<td>
-					<?php if ($has_error && empty($_POST['privacy_policy_agreement'])): ?><p style="color: red;">個人情報保護方針に同意してください。</p>
+					<?php if (empty($_POST['privacy_policy_agreement'])): ?><p style="color: red;">個人情報保護方針に同意してください。</p>
 						<?php endif; ?>
 						<label>
 							<input type="checkbox" name="privacy_policy_agreement" <?= !empty($_POST['privacy_policy_agreement']) ? 'checked' : '' ?>>
