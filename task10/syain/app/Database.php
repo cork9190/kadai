@@ -104,5 +104,38 @@ class Database
       exit;
     }
   }
+
+  // 特定のIDを持つ社員情報を更新するメソッドを定義します。
+  function updateSyain($id, $name, $age, $work)
+  {
+    try {
+      $this->connect();
+      $stmt = $this->pdo->prepare("UPDATE syain SET name = ?, age = ?, work = ? WHERE id = ?;");
+      $stmt->bindParam(1, $name, PDO::PARAM_STR);
+      $stmt->bindParam(2, $age, PDO::PARAM_INT);
+      $stmt->bindParam(3, $work, PDO::PARAM_STR);
+      $stmt->bindParam(4, $id, PDO::PARAM_INT);
+      $stmt->execute();
+      return true;
+    } catch (PDOException $e) {
+      echo $e->getMessage() . '<br>';
+      return false;
+    }
+  }
+
+  // 特定のIDを持つ社員情報を削除するメソッドを定義します。
+  function deleteSyain($id)
+  {
+    try {
+      $this->connect();
+      $stmt = $this->pdo->prepare("DELETE FROM syain WHERE id = ?;");
+      $stmt->bindParam(1, $id, PDO::PARAM_INT);
+      $stmt->execute();
+      return true;
+    } catch (PDOException $e) {
+      echo $e->getMessage() . '<br>';
+      return false;
+    }
+  }
 }
 ?>
