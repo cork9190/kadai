@@ -67,15 +67,8 @@ function create_syain($id, $name, $age, $work)
     header("Location: index.php");
     exit;
   } else {
-    // 社員番号が既に存在する場合、一時的に社員情報をセッションに保存します
-    $_SESSION['temp_syain'] = [
-      'id' => $id,
-      'name' => $name,
-      'age' => $age,
-      'work' => $work,
-    ];
-    // 社員作成ページにエラーメッセージと共にリダイレクトします
-    header("Location: syain_create.php?error=duplicate");
+    // 社員番号が既に存在する場合、リダイレクト時にエラーメッセージと共にデータをクエリパラメータとして渡します。
+    header("Location: syain_create.php?error=duplicate&id={$id}&name={$name}&age={$age}&work={$work}");
     exit;
   }
 }

@@ -72,7 +72,7 @@ class Database
   }
 
   // 新たな社員を作成するメソッドを定義します。各引数は社員の属性（ID、名前、年齢、仕事）を指します。
-  function createsyain($id, $name, $age, $work)
+  function createSyain($id, $name, $age, $work)
   {
     try {
       $stmt = $this->pdo->prepare("INSERT INTO syain VALUES(?,?,?,?);");
@@ -106,20 +106,21 @@ class Database
   }
 
   // 特定のIDを持つ社員情報を更新するメソッドを定義します。
-  function updateSyain($id, $name, $age, $work)
-  {
-    try {
-      $this->connect();
-      $stmt = $this->pdo->prepare("UPDATE syain SET name = ?, age = ?, work = ? WHERE id = ?;");
-      $stmt->bindParam(1, $name, PDO::PARAM_STR);
-      $stmt->bindParam(2, $age, PDO::PARAM_INT);
-      $stmt->bindParam(3, $work, PDO::PARAM_STR);
-      $stmt->bindParam(4, $id, PDO::PARAM_INT);
-      $stmt->execute();
-      return true;
-    } catch (PDOException $e) {
-      echo $e->getMessage() . '<br>';
-      return false;
+  function updateSyain($old_id, $id, $name, $age, $work)
+{
+  try {
+    $this->connect();
+    $stmt = $this->pdo->prepare("UPDATE syain SET id = ?, name = ?, age = ?, work = ? WHERE id = ?;");
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $name, PDO::PARAM_STR);
+    $stmt->bindParam(3, $age, PDO::PARAM_INT);
+    $stmt->bindParam(4, $work, PDO::PARAM_STR);
+    $stmt->bindParam(5, $old_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return true;
+  } catch (PDOException $e) {
+    echo $e->getMessage() . '<br>';
+    return false;
     }
   }
 

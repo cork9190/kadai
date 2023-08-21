@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // HTMLのドキュメント上部を表示する関数
 // オプションの引数 $heading が指定されていない場合、デフォルトでは "社員一覧" をヘッダーとして表示します
 function show_top($heading = "社員一覧")
@@ -61,7 +61,6 @@ TABLE3;
 // 各引数はフォームの各フィールドに相当します。$status は操作の種類（例えば "create"）、$button は送信ボタンのラベルを指します
 function show_form($id, $name, $age, $work, $old_id, $status, $button)
 {
-  $error = "";
   $error = get_error();
   echo <<<FORM
   <form action="post_data.php" method="post">
@@ -86,12 +85,34 @@ FORM;
 function show_create()
 {
   $error = get_error();
-  $name = isset($_GET['name']) ? $_GET['name'] : '';
-  $age = isset($_GET['age']) ? $_GET['age'] : '';
-  $work = isset($_GET['work']) ? $_GET['work'] : '';
-  show_form("", $name, $age, $work, "", "create", "登録");
+
+  $id = isset($_POST['id']) ? $_POST['id'] : (isset($_GET['id']) ? $_GET['id'] : '');
+  $name = isset($_POST['name']) ? $_POST['name'] : (isset($_GET['name']) ? $_GET['name'] : '');
+  $age = isset($_POST['age']) ? $_POST['age'] : (isset($_GET['age']) ? $_GET['age'] : '');
+  $work = isset($_POST['work']) ? $_POST['work'] : (isset($_GET['work']) ? $_GET['work'] : '');
+  show_form($id, $name, $age, $work, "", "create", "登録");
 }
+
+function show_update($syain)
+{
+    if (!isset($_GET['id'])) {
+        die("IDが指定されていません。");
+    }
+
+    $old_id = $_GET['id']; // URLのクエリパラメータからIDを取得
+
+    $db = new Database(); // データベースの新しいインスタンスを作成します
+    $syain = $db->getSyainById($old_id); // 社員情報を取得
+
+    //URLのクエリパラメータにidが存在する場合、$idに$_GET['id']の値を代入し、存在しない場合は$idに$syain['id']の値を代入します。
+    $id = isset($_GET['id']) ? $_GET['id'] : $syain['id'];
+    $name = isset($_GET['name']) ? $_GET['name'] : $syain['name'];
+    $age = isset($_GET['age']) ? $_GET['age'] : $syain['age'];
+    $work = isset($_GET['work']) ? $_GET['work'] : $syain['work'];
+    $error = isset($_GET['error']) ? $_GET['error'] : "";
+
+    show_form($id, $name, $age, $work, $old_id, "update", "更新");
+}
+
+
 ?>
-
-
-
