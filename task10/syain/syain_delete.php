@@ -1,6 +1,8 @@
 <?php
 require_once('common.php'); // 共通ファイルをインクルード
 
+show_top("社員情報の削除"); 
+
 $id = $_GET['id']; // URLのクエリパラメータからIDを取得
 $syain = $db->getSyainById($id); // 社員情報を取得
 
@@ -27,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>社員情報の削除</title>
 </head>
 <body>
-  <h1>削除確認</h1>
   <p>以下の社員を削除しますか？</p>
   <p>社員番号: <?php echo $syain["id"]; ?></p>
   <p>名前: <?php echo $syain["name"]; ?></p>
