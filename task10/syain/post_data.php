@@ -10,8 +10,7 @@ if (isset($_POST["status"])) {
     $status = $_POST["status"]; // statusを変数に格納
 
     if ($status == "create") {
-        if (check_input($id, $name, $age, $work, $status, $old_id) == false) {
-        }
+        check_input($id, $name, $age, $work, $status, $old_id);
 
         if ($db->idexist($id) == true) {
             $error = "既に使用されているIDです";
@@ -25,8 +24,7 @@ if (isset($_POST["status"])) {
             exit();
         }
     } elseif ($status == "update") {
-        if (check_input($id, $name, $age, $work, $status, $old_id) == false) {
-        }
+        check_input($id, $name, $age, $work, $status, $old_id);
 
         if ($id != $old_id && $db->idexist($id)) {
             $error = "既に使用されているIDです";
@@ -39,10 +37,13 @@ if (isset($_POST["status"])) {
             header("Location: syain_update.php?id={$old_id}&error={$error}");
             exit();
         }
+    } elseif ($status == "delete") {
+        $db->deleteSyain($id);
+        header("Location: index.php");
     } else {
         die("Invalid status value.");
     }
-
+    
     header("Location: index.php");
     exit();
 }
